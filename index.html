@@ -3,370 +3,784 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FiveM Server Template</title>
-    <!-- Tailwind CSS via CDN -->
+    <title>Vice City Roleplay - Premium FiveM Server</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GSAP -->
+    
+    <!-- GSAP for animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <!-- Lenis for smooth scrolling -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
-    <!-- Three.js for 3D effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
-    <!-- Roboto Condensed Font (Similar to R6S) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    
     <!-- Remix Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/style.css">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        'siege': ['Roboto Condensed', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'orbitron': ['Orbitron', 'monospace'],
                     },
                     colors: {
-                        siege: {
-                            blue: '#1A1F2B',
-                            orange: '#FF6B00',
-                            gray: '#2A2F3B',
-                            white: '#F5F5F5',
-                            dark: '#0F1319'
+                        vice: {
+                            // Miami Vice inspired palette
+                            'pink': '#FF0080',
+                            'purple': '#8000FF',
+                            'cyan': '#00FFFF',
+                            'orange': '#FF8000',
+                            'yellow': '#FFFF00',
+                            'blue': '#0080FF',
+                            // Dark theme colors
+                            'dark': '#0A0A0F',
+                            'darker': '#050508',
+                            'gray': '#1A1A1F',
+                            'gray-light': '#2A2A2F',
+                            'gray-lighter': '#3A3A3F',
+                            'white': '#FFFFFF',
+                            'text': '#E5E5E5',
+                            'text-muted': '#A0A0A0'
                         }
+                    },
+                    backgroundImage: {
+                        'vice-gradient': 'linear-gradient(135deg, #FF0080 0%, #8000FF 50%, #00FFFF 100%)',
+                        'vice-gradient-alt': 'linear-gradient(45deg, #FF8000 0%, #FFFF00 50%, #FF0080 100%)',
+                        'vice-sunset': 'linear-gradient(180deg, #FF8000 0%, #FF0080 50%, #8000FF 100%)',
+                        'vice-ocean': 'linear-gradient(180deg, #00FFFF 0%, #0080FF 50%, #8000FF 100%)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        glow: {
+                            '0%': { 'box-shadow': '0 0 20px rgba(255, 0, 128, 0.3)' },
+                            '100%': { 'box-shadow': '0 0 40px rgba(255, 0, 128, 0.6)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(100px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-siege-blue text-siege-white font-siege antialiased">
-    <!-- Tactical Cursor -->
-    <div class="tactical-cursor"></div>
-    <div class="tactical-cursor-dot"></div>
-
+<body class="bg-vice-darker text-vice-text font-inter antialiased overflow-x-hidden">
+    
     <!-- Loading Screen -->
-    <div class="loading-screen fixed inset-0 bg-siege-dark z-50 flex items-center justify-center">
+    <div class="loading-screen fixed inset-0 bg-vice-darker z-50 flex items-center justify-center">
         <div class="loading-content text-center">
-            <div class="loading-logo mb-8">
-                <svg class="w-24 h-24 mx-auto" viewBox="0 0 100 100">
-                    <!-- Animated tactical loading icon -->
-                    <polygon class="loading-shape" points="50,10 90,50 50,90 10,50" fill="none" stroke="#FF6B00" stroke-width="2"/>
-                </svg>
+            <div class="vice-logo mb-8 relative">
+                <div class="w-32 h-32 mx-auto relative">
+                    <div class="absolute inset-0 border-2 border-vice-pink rounded-full animate-spin"></div>
+                    <div class="absolute inset-2 border-2 border-vice-cyan rounded-full animate-spin" style="animation-direction: reverse;"></div>
+                    <div class="absolute inset-4 border-2 border-vice-orange rounded-full animate-spin"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="ri-car-line text-4xl text-vice-pink"></i>
+                    </div>
+                </div>
             </div>
-            <div class="loading-bar w-48 h-1 bg-siege-white/20 mx-auto relative overflow-hidden">
-                <div class="loading-progress absolute top-0 left-0 h-full w-full bg-siege-orange transform -translate-x-full"></div>
+            <div class="text-2xl font-orbitron mb-4 text-vice-pink">LOADING VICE CITY</div>
+            <div class="loading-bar w-64 h-2 bg-vice-gray mx-auto relative overflow-hidden rounded-full">
+                <div class="loading-progress absolute top-0 left-0 h-full bg-vice-gradient transform -translate-x-full rounded-full"></div>
             </div>
+            <div class="mt-4 text-sm text-vice-text-muted font-orbitron">CONNECTING TO SERVER...</div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-40 transition-all duration-300" data-nav>
-        <div class="container mx-auto px-6 py-8">
-            <div class="flex items-center justify-between">
-                <a href="#" class="text-4xl font-siege font-bold tracking-wider uppercase relative group overflow-hidden">
-                    <span class="relative z-10">FIVEM</span>
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-siege-orange transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                </a>
-                <button class="menu-toggle p-2 hover:bg-siege-orange/10 rounded-none transition-colors tactical-border">
-                    <i class="ri-menu-line text-2xl"></i>
-                </button>
+    <nav class="fixed top-0 left-0 w-full z-40 transition-all duration-500" data-nav>
+        <div class="vice-glass backdrop-blur-md border-b border-vice-pink/20">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <a href="#" class="text-2xl font-orbitron font-bold relative group">
+                        <span class="relative z-10 bg-vice-gradient bg-clip-text text-transparent">
+                            VICE CITY RP
+                        </span>
+                        <div class="absolute inset-0 bg-vice-gradient opacity-20 blur-lg group-hover:opacity-40 transition-opacity"></div>
+                    </a>
+                    
+                    <!-- Desktop Menu -->
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#home" class="nav-link relative group">
+                            <span class="relative z-10">Home</span>
+                            <div class="absolute bottom-0 left-0 w-full h-0.5 bg-vice-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+                        </a>
+                        <a href="#about" class="nav-link relative group">
+                            <span class="relative z-10">About</span>
+                            <div class="absolute bottom-0 left-0 w-full h-0.5 bg-vice-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+                        </a>
+                        <a href="#features" class="nav-link relative group">
+                            <span class="relative z-10">Features</span>
+                            <div class="absolute bottom-0 left-0 w-full h-0.5 bg-vice-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+                        </a>
+                        <a href="#team" class="nav-link relative group">
+                            <span class="relative z-10">Team</span>
+                            <div class="absolute bottom-0 left-0 w-full h-0.5 bg-vice-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+                        </a>
+                        <a href="#rules" class="nav-link relative group">
+                            <span class="relative z-10">Rules</span>
+                            <div class="absolute bottom-0 left-0 w-full h-0.5 bg-vice-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+                        </a>
+                        <a href="#join" class="vice-button px-6 py-2 bg-vice-gradient text-vice-darker font-semibold rounded-lg hover:shadow-lg hover:shadow-vice-pink/25 transition-all">
+                            Connect
+                        </a>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden vice-button-outline p-2 border border-vice-pink/30 rounded-lg" data-mobile-toggle>
+                        <i class="ri-menu-line text-xl"></i>
+                    </button>
+                </div>
             </div>
         </div>
-        <!-- Tactical Menu Overlay -->
-        <div class="fixed inset-0 bg-siege-dark/95 opacity-0 pointer-events-none transition-opacity duration-300" data-menu-overlay>
-            <div class="container mx-auto px-4 py-20">
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu fixed inset-0 bg-vice-darker/95 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 md:hidden" data-mobile-menu>
+            <div class="container mx-auto px-6 py-20">
                 <div class="space-y-8">
-                    <a href="#home" class="tactical-link block text-7xl font-siege font-bold uppercase hover:text-siege-orange transition-all relative">
-                        <span class="relative z-10">Home</span>
-                        <div class="absolute left-0 top-1/2 w-0 h-0.5 bg-siege-orange transform -translate-y-1/2 transition-all duration-300"></div>
-                    </a>
-                    <a href="#features" class="tactical-link block text-7xl font-siege font-bold uppercase hover:text-siege-orange transition-all relative">
-                        <span class="relative z-10">Features</span>
-                        <div class="absolute left-0 top-1/2 w-0 h-0.5 bg-siege-orange transform -translate-y-1/2 transition-all duration-300"></div>
-                    </a>
-                    <a href="#districts" class="tactical-link block text-7xl font-siege font-bold uppercase hover:text-siege-orange transition-all relative">
-                        <span class="relative z-10">Districts</span>
-                        <div class="absolute left-0 top-1/2 w-0 h-0.5 bg-siege-orange transform -translate-y-1/2 transition-all duration-300"></div>
-                    </a>
-                    <a href="#systems" class="tactical-link block text-7xl font-siege font-bold uppercase hover:text-siege-orange transition-all relative">
-                        <span class="relative z-10">Systems</span>
-                        <div class="absolute left-0 top-1/2 w-0 h-0.5 bg-siege-orange transform -translate-y-1/2 transition-all duration-300"></div>
-                    </a>
-                    <a href="#rules" class="tactical-link block text-7xl font-siege font-bold uppercase hover:text-siege-orange transition-all relative">
-                        <span class="relative z-10">Rules</span>
-                        <div class="absolute left-0 top-1/2 w-0 h-0.5 bg-siege-orange transform -translate-y-1/2 transition-all duration-300"></div>
-                    </a>
-                    <a href="#join" class="tactical-link block text-7xl font-siege font-bold uppercase hover:text-siege-orange transition-all relative">
-                        <span class="relative z-10">Join</span>
-                        <div class="absolute left-0 top-1/2 w-0 h-0.5 bg-siege-orange transform -translate-y-1/2 transition-all duration-300"></div>
-                    </a>
+                    <a href="#home" class="block text-4xl font-bold hover:text-vice-pink transition-colors">Home</a>
+                    <a href="#about" class="block text-4xl font-bold hover:text-vice-pink transition-colors">About</a>
+                    <a href="#features" class="block text-4xl font-bold hover:text-vice-pink transition-colors">Features</a>
+                    <a href="#team" class="block text-4xl font-bold hover:text-vice-pink transition-colors">Team</a>
+                    <a href="#rules" class="block text-4xl font-bold hover:text-vice-pink transition-colors">Rules</a>
+                    <a href="#join" class="block text-4xl font-bold hover:text-vice-pink transition-colors">Connect</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main class="relative z-30">
         <!-- Hero Section -->
         <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
-            <!-- Tactical Grid Background -->
-            <div class="absolute inset-0">
-                <div class="tactical-grid"></div>
+            <!-- Background Video/Image -->
+            <div class="absolute inset-0 bg-gradient-to-br from-vice-pink/20 via-vice-purple/20 to-vice-cyan/20"></div>
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-30"></div>
+            <div class="absolute inset-0 bg-vice-darker/60"></div>
+            
+            <!-- Floating Elements -->
+            <div class="floating-elements absolute inset-0 pointer-events-none">
+                <div class="absolute top-20 left-10 w-4 h-4 bg-vice-pink rounded-full animate-float opacity-60"></div>
+                <div class="absolute top-40 right-20 w-6 h-6 bg-vice-cyan rounded-full animate-float opacity-40" style="animation-delay: 1s;"></div>
+                <div class="absolute bottom-40 left-20 w-3 h-3 bg-vice-orange rounded-full animate-float opacity-50" style="animation-delay: 2s;"></div>
+                <div class="absolute bottom-20 right-10 w-5 h-5 bg-vice-purple rounded-full animate-float opacity-30" style="animation-delay: 3s;"></div>
             </div>
-            <!-- Animated Background Shapes -->
-            <div class="absolute inset-0 overflow-hidden">
-                <div class="tactical-shapes"></div>
-            </div>
-            <div class="container mx-auto px-4 py-20 relative">
-                <div class="max-w-5xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h1 class="text-8xl md:text-9xl font-siege font-bold uppercase mb-6 glitch-text">
-                            Server Name
+
+            <div class="container mx-auto px-6 py-20 relative z-10">
+                <div class="max-w-6xl mx-auto text-center">
+                    <!-- Main Title -->
+                    <div class="mb-8 relative">
+                        <h1 class="text-6xl md:text-8xl font-orbitron font-black mb-4 relative">
+                            <span class="vice-text bg-vice-gradient bg-clip-text text-transparent">
+                                VICE CITY
+                            </span>
+                            <div class="absolute inset-0 bg-vice-gradient opacity-20 blur-2xl"></div>
                         </h1>
-                        <p class="text-xl md:text-2xl text-siege-white/70 mb-12 font-siege typing-text">
-                            Advanced Roleplay Experience
+                        <div class="text-xl md:text-2xl text-vice-text/70 font-inter">
+                            <span class="typing-text">PREMIUM FIVEM ROLEPLAY EXPERIENCE</span>
+                        </div>
+                    </div>
+
+                    <!-- Server Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                        <div class="vice-card p-6 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="text-3xl font-orbitron font-bold text-vice-pink mb-2 counter" data-target="247">0</div>
+                                <div class="text-sm text-vice-text-muted font-inter uppercase tracking-wider">Players Online</div>
+                            </div>
+                        </div>
+                        <div class="vice-card p-6 bg-vice-gray/30 backdrop-blur-md border border-vice-cyan/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="text-3xl font-orbitron font-bold text-vice-cyan mb-2 counter" data-target="150">0</div>
+                                <div class="text-sm text-vice-text-muted font-inter uppercase tracking-wider">Custom Jobs</div>
+                            </div>
+                        </div>
+                        <div class="vice-card p-6 bg-vice-gray/30 backdrop-blur-md border border-vice-orange/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="text-3xl font-orbitron font-bold text-vice-orange mb-2">24/7</div>
+                                <div class="text-sm text-vice-text-muted font-inter uppercase tracking-wider">Uptime</div>
+                            </div>
+                        </div>
+                        <div class="vice-card p-6 bg-vice-gray/30 backdrop-blur-md border border-vice-purple/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="text-3xl font-orbitron font-bold text-vice-purple mb-2 counter" data-target="512">0</div>
+                                <div class="text-sm text-vice-text-muted font-inter uppercase tracking-wider">Max Slots</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap justify-center gap-6">
+                        <a href="#join" class="vice-button-primary group relative overflow-hidden px-8 py-4 bg-vice-gradient text-vice-darker font-bold rounded-xl hover:shadow-2xl hover:shadow-vice-pink/25 transition-all">
+                            <span class="relative z-10 flex items-center font-orbitron">
+                                <i class="ri-play-circle-line mr-2"></i>
+                                CONNECT NOW
+                            </span>
+                            <div class="absolute inset-0 bg-white/20 transform translate-y-full group-hover:translate-y-0 transition-transform"></div>
+                        </a>
+                        <a href="#about" class="vice-button-outline group relative overflow-hidden px-8 py-4 border-2 border-vice-pink text-vice-pink font-bold rounded-xl hover:bg-vice-pink hover:text-vice-darker transition-all">
+                            <span class="relative z-10 flex items-center font-orbitron">
+                                <i class="ri-information-line mr-2"></i>
+                                LEARN MORE
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-float">
+                <div class="w-6 h-10 border-2 border-vice-pink rounded-full flex justify-center">
+                    <div class="w-1 h-3 bg-vice-pink rounded-full mt-2 animate-pulse"></div>
+                </div>
+                <span class="mt-2 text-xs text-vice-text-muted font-orbitron uppercase tracking-wider">Scroll</span>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 relative bg-vice-dark">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-5xl md:text-6xl font-orbitron font-black mb-6">
+                            <span class="bg-vice-gradient bg-clip-text text-transparent">
+                                ABOUT VICE CITY
+                            </span>
+                        </h2>
+                        <p class="text-xl text-vice-text/70 max-w-3xl mx-auto">
+                            Experience the ultimate FiveM roleplay server inspired by the iconic Miami Vice aesthetic. 
+                            Immerse yourself in a world of luxury, crime, and endless possibilities.
                         </p>
                     </div>
-                    <div class="flex flex-wrap justify-center gap-6">
-                        <a href="#join" class="tactical-button bg-siege-orange text-siege-dark px-8 py-4 font-siege font-bold uppercase tracking-wider hover:bg-siege-orange/90 transition-colors relative overflow-hidden group">
-                            <span class="relative z-10">Join Server</span>
-                            <div class="absolute inset-0 bg-white/20 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                        </a>
-                        <a href="#features" class="tactical-button-outline border-2 border-siege-orange text-siege-orange px-8 py-4 font-siege font-bold uppercase tracking-wider hover:bg-siege-orange hover:text-siege-dark transition-all relative overflow-hidden group">
-                            <span class="relative z-10">View Features</span>
-                            <div class="absolute inset-0 bg-siege-orange transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                        </a>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-xl relative group hover:scale-105 transition-transform">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="w-16 h-16 mb-6 bg-vice-gradient rounded-xl flex items-center justify-center">
+                                    <i class="ri-car-line text-2xl text-vice-darker"></i>
+                                </div>
+                                <h3 class="text-2xl font-orbitron font-bold mb-4 text-vice-pink">Luxury Vehicles</h3>
+                                <p class="text-vice-text/70">
+                                    Drive the most exclusive supercars, yachts, and aircraft. From Lamborghinis to private jets, 
+                                    experience the high life in Vice City.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-cyan/20 rounded-xl relative group hover:scale-105 transition-transform">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="w-16 h-16 mb-6 bg-vice-gradient rounded-xl flex items-center justify-center">
+                                    <i class="ri-building-line text-2xl text-vice-darker"></i>
+                                </div>
+                                <h3 class="text-2xl font-orbitron font-bold mb-4 text-vice-cyan">Business Empire</h3>
+                                <p class="text-vice-text/70">
+                                    Build your criminal empire or legitimate business. From nightclubs to drug cartels, 
+                                    the choice is yours in this open-world experience.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-orange/20 rounded-xl relative group hover:scale-105 transition-transform">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="w-16 h-16 mb-6 bg-vice-gradient rounded-xl flex items-center justify-center">
+                                    <i class="ri-shield-star-line text-2xl text-vice-darker"></i>
+                                </div>
+                                <h3 class="text-2xl font-orbitron font-bold mb-4 text-vice-orange">Elite Community</h3>
+                                <p class="text-vice-text/70">
+                                    Join a premium community of serious roleplayers. Our strict whitelist ensures 
+                                    high-quality interactions and immersive experiences.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Scroll Indicator -->
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-                <div class="w-0.5 h-16 bg-siege-orange/20 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-full bg-siege-orange transform -translate-y-full animate-scroll"></div>
-                </div>
-                <span class="mt-4 text-sm uppercase tracking-wider text-siege-white/50">Scroll Down</span>
             </div>
         </section>
 
         <!-- Features Section -->
         <section id="features" class="py-20 relative">
-            <div class="absolute inset-0">
-                <div class="tactical-grid opacity-10"></div>
-            </div>
-            <div class="container mx-auto px-4 relative">
-                <h2 class="text-7xl font-siege font-bold uppercase tracking-wide mb-16 text-center tactical-heading">Server Features</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="tactical-card p-8 bg-siege-gray relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <i class="ri-police-car-line text-3xl text-siege-orange mb-6"></i>
-                        <h3 class="text-3xl font-siege font-bold uppercase mb-4">Law Enforcement</h3>
-                        <p class="text-siege-white/70">Join the police force and protect the city.</p>
-                    </div>
-                    <div class="tactical-card p-8 bg-siege-gray relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <i class="ri-building-2-line text-3xl text-siege-orange mb-6"></i>
-                        <h3 class="text-3xl font-siege font-bold uppercase mb-4">Criminal Empire</h3>
-                        <p class="text-siege-white/70">Build your criminal organization from scratch.</p>
-                    </div>
-                    <div class="tactical-card p-8 bg-siege-gray relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <i class="ri-store-2-line text-3xl text-siege-orange mb-6"></i>
-                        <h3 class="text-3xl font-siege font-bold uppercase mb-4">Civilian Life</h3>
-                        <p class="text-siege-white/70">Run businesses and live the civilian dream.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Districts Section -->
-        <section id="districts" class="py-20 relative bg-siege-gray">
-            <div class="container mx-auto px-4">
-                <h2 class="text-7xl font-siege font-bold uppercase tracking-wide mb-16 text-center tactical-heading">City Districts</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <!-- District Cards -->
-                    <div class="feature-card relative group">
-                        <div class="aspect-video overflow-hidden tactical-border">
-                            <img src="https://placehold.co/800x450" alt="Downtown" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-siege-dark via-transparent to-transparent"></div>
-                        </div>
-                        <div class="absolute bottom-0 left-0 p-6 w-full">
-                            <h3 class="text-4xl font-siege font-bold uppercase mb-2 group-hover:text-siege-orange transition-colors">Downtown</h3>
-                            <p class="text-siege-white/70">The bustling heart of the city's business district.</p>
-                        </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-5xl md:text-6xl font-orbitron font-black mb-6">
+                            <span class="bg-vice-gradient bg-clip-text text-transparent">
+                                SERVER FEATURES
+                            </span>
+                        </h2>
+                        <p class="text-xl text-vice-text/70 max-w-3xl mx-auto">
+                            Discover the cutting-edge features that make Vice City RP the premier FiveM experience.
+                        </p>
                     </div>
 
-                    <div class="feature-card relative group">
-                        <div class="aspect-video overflow-hidden tactical-border">
-                            <img src="https://placehold.co/800x450" alt="Harbor" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-siege-dark via-transparent to-transparent"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="vice-feature-card relative group overflow-hidden rounded-xl">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Custom Economy" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-vice-darker via-transparent to-transparent"></div>
+                                <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h3 class="text-3xl font-orbitron font-bold mb-2 text-vice-pink">Dynamic Economy</h3>
+                                <p class="text-vice-text/80">Advanced economic system with stock markets, real estate, and business investments.</p>
+                            </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 p-6 w-full">
-                            <h3 class="text-4xl font-siege font-bold uppercase mb-2 group-hover:text-siege-orange transition-colors">Harbor</h3>
-                            <p class="text-siege-white/70">Control the city's maritime commerce hub.</p>
-                        </div>
-                    </div>
 
-                    <div class="feature-card relative group">
-                        <div class="aspect-video overflow-hidden tactical-border">
-                            <img src="https://placehold.co/800x450" alt="Suburbs" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-siege-dark via-transparent to-transparent"></div>
+                        <!-- Feature 2 -->
+                        <div class="vice-feature-card relative group overflow-hidden rounded-xl">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Luxury Properties" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-vice-darker via-transparent to-transparent"></div>
+                                <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h3 class="text-3xl font-orbitron font-bold mb-2 text-vice-cyan">Luxury Properties</h3>
+                                <p class="text-vice-text/80">Own penthouses, mansions, and private islands with full customization options.</p>
+                            </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 p-6 w-full">
-                            <h3 class="text-4xl font-siege font-bold uppercase mb-2 group-hover:text-siege-orange transition-colors">Suburbs</h3>
-                            <p class="text-siege-white/70">Peaceful residential areas with hidden secrets.</p>
-                        </div>
-                    </div>
 
-                    <div class="feature-card relative group">
-                        <div class="aspect-video overflow-hidden tactical-border">
-                            <img src="https://placehold.co/800x450" alt="Industrial" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-siege-dark via-transparent to-transparent"></div>
+                        <!-- Feature 3 -->
+                        <div class="vice-feature-card relative group overflow-hidden rounded-xl">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Exclusive Vehicles" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-vice-darker via-transparent to-transparent"></div>
+                                <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h3 class="text-3xl font-orbitron font-bold mb-2 text-vice-orange">Exclusive Fleet</h3>
+                                <p class="text-vice-text/80">Access to rare supercars, yachts, helicopters, and private jets.</p>
+                            </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 p-6 w-full">
-                            <h3 class="text-4xl font-siege font-bold uppercase mb-2 group-hover:text-siege-orange transition-colors">Industrial</h3>
-                            <p class="text-siege-white/70">The gritty industrial zone full of opportunities.</p>
+
+                        <!-- Feature 4 -->
+                        <div class="vice-feature-card relative group overflow-hidden rounded-xl">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Nightlife Events" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-vice-darker via-transparent to-transparent"></div>
+                                <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h3 class="text-3xl font-orbitron font-bold mb-2 text-vice-purple">Elite Events</h3>
+                                <p class="text-vice-text/80">Exclusive parties, races, and criminal operations for VIP members.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Systems Section -->
-        <section id="systems" class="py-20 relative">
-            <div class="absolute inset-0">
-                <div class="tactical-grid opacity-10"></div>
-            </div>
-            <div class="container mx-auto px-4 relative">
-                <h2 class="text-7xl font-siege font-bold uppercase tracking-wide mb-16 text-center tactical-heading">Custom Systems</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="tactical-card p-8 bg-siege-gray relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <i class="ri-car-line text-3xl text-siege-orange mb-6"></i>
-                        <h3 class="text-3xl font-siege font-bold uppercase mb-4">Vehicle System</h3>
-                        <p class="text-siege-white/70">Custom vehicles with realistic handling and damage.</p>
+        <!-- Team Section -->
+        <section id="team" class="py-20 relative bg-vice-dark">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-5xl md:text-6xl font-orbitron font-black mb-6">
+                            <span class="bg-vice-gradient bg-clip-text text-transparent">
+                                THE SYNDICATE
+                            </span>
+                        </h2>
+                        <p class="text-xl text-vice-text/70 max-w-3xl mx-auto">
+                            Meet the elite team behind Vice City RP - dedicated professionals ensuring the highest quality roleplay experience.
+                        </p>
                     </div>
-                    <div class="tactical-card p-8 bg-siege-gray relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <i class="ri-bank-card-line text-3xl text-siege-orange mb-6"></i>
-                        <h3 class="text-3xl font-siege font-bold uppercase mb-4">Economy System</h3>
-                        <p class="text-siege-white/70">Dynamic economy with multiple income sources.</p>
+
+                    <!-- Owner Section -->
+                    <div class="mb-16">
+                        <h3 class="text-3xl font-orbitron font-bold mb-8 text-center flex items-center justify-center">
+                            <i class="ri-vip-crown-line mr-3 text-vice-orange"></i>
+                            <span class="text-vice-orange">KINGPIN</span>
+                        </h3>
+                        
+                        <div class="max-w-lg mx-auto">
+                            <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-orange/20 rounded-xl relative group text-center">
+                                <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                                <div class="relative z-10">
+                                    <div class="w-32 h-32 mx-auto mb-6 relative">
+                                        <div class="absolute inset-0 bg-vice-gradient rounded-full p-1">
+                                            <div class="w-full h-full rounded-full overflow-hidden">
+                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80" alt="Kingpin" class="w-full h-full object-cover">
+                                            </div>
+                                        </div>
+                                        <div class="absolute inset-0 bg-vice-gradient opacity-20 rounded-full blur-xl animate-pulse"></div>
+                                    </div>
+                                    <h3 class="text-2xl font-orbitron font-bold mb-2 text-vice-orange">The Kingpin</h3>
+                                    <p class="text-vice-text/70 mb-6 font-inter">FOUNDER & LEAD DEVELOPER</p>
+                                    <div class="flex justify-center space-x-4">
+                                        <a href="https://discord.gg/placeholder" target="_blank" class="vice-social-link">
+                                            <i class="ri-discord-line text-xl"></i>
+                                        </a>
+                                        <a href="https://steamcommunity.com/id/placeholder" target="_blank" class="vice-social-link">
+                                            <i class="ri-steam-line text-xl"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tactical-card p-8 bg-siege-gray relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <i class="ri-group-line text-3xl text-siege-orange mb-6"></i>
-                        <h3 class="text-3xl font-siege font-bold uppercase mb-4">Gang System</h3>
-                        <p class="text-siege-white/70">Create and manage your own organizations.</p>
+
+                    <!-- Staff Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Lieutenant -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-xl relative group text-center">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="w-24 h-24 mx-auto mb-6 relative">
+                                    <div class="absolute inset-0 bg-vice-gradient rounded-full p-1">
+                                        <div class="w-full h-full rounded-full overflow-hidden">
+                                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80" alt="Lieutenant" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 bg-vice-gradient opacity-20 rounded-full blur-lg animate-pulse"></div>
+                                </div>
+                                <h3 class="text-xl font-orbitron font-bold mb-2 text-vice-pink">Lieutenant</h3>
+                                <p class="text-vice-text/70 mb-6 font-inter text-sm">HEAD ADMINISTRATOR</p>
+                                <div class="flex justify-center space-x-4">
+                                    <a href="https://discord.gg/placeholder" target="_blank" class="vice-social-link">
+                                        <i class="ri-discord-line text-lg"></i>
+                                    </a>
+                                    <a href="https://steamcommunity.com/id/placeholder" target="_blank" class="vice-social-link">
+                                        <i class="ri-steam-line text-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enforcer -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-cyan/20 rounded-xl relative group text-center">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="w-24 h-24 mx-auto mb-6 relative">
+                                    <div class="absolute inset-0 bg-vice-gradient rounded-full p-1">
+                                        <div class="w-full h-full rounded-full overflow-hidden">
+                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80" alt="Enforcer" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 bg-vice-gradient opacity-20 rounded-full blur-lg animate-pulse"></div>
+                                </div>
+                                <h3 class="text-xl font-orbitron font-bold mb-2 text-vice-cyan">Enforcer</h3>
+                                <p class="text-vice-text/70 mb-6 font-inter text-sm">COMMUNITY MODERATOR</p>
+                                <div class="flex justify-center space-x-4">
+                                    <a href="https://discord.gg/placeholder" target="_blank" class="vice-social-link">
+                                        <i class="ri-discord-line text-lg"></i>
+                                    </a>
+                                    <a href="https://steamcommunity.com/id/placeholder" target="_blank" class="vice-social-link">
+                                        <i class="ri-steam-line text-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Specialist -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-purple/20 rounded-xl relative group text-center">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="w-24 h-24 mx-auto mb-6 relative">
+                                    <div class="absolute inset-0 bg-vice-gradient rounded-full p-1">
+                                        <div class="w-full h-full rounded-full overflow-hidden">
+                                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80" alt="Specialist" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 bg-vice-gradient opacity-20 rounded-full blur-lg animate-pulse"></div>
+                                </div>
+                                <h3 class="text-xl font-orbitron font-bold mb-2 text-vice-purple">Specialist</h3>
+                                <p class="text-vice-text/70 mb-6 font-inter text-sm">SUPPORT SPECIALIST</p>
+                                <div class="flex justify-center space-x-4">
+                                    <a href="https://discord.gg/placeholder" target="_blank" class="vice-social-link">
+                                        <i class="ri-discord-line text-lg"></i>
+                                    </a>
+                                    <a href="https://steamcommunity.com/id/placeholder" target="_blank" class="vice-social-link">
+                                        <i class="ri-steam-line text-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Rules Section -->
-        <section id="rules" class="py-20 relative bg-siege-gray">
-            <div class="container mx-auto px-4">
-                <h2 class="text-7xl font-siege font-bold uppercase tracking-wide mb-16 text-center tactical-heading">Server Rules</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="tactical-card p-8 bg-siege-dark relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="flex items-center mb-6">
-                            <i class="ri-file-list-3-line text-2xl text-siege-orange mr-4"></i>
-                            <h3 class="text-3xl font-siege font-bold uppercase">General Rules</h3>
-                        </div>
-                        <ul class="space-y-4">
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                Stay in character at all times
-                            </li>
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                No random death match (RDM)
-                            </li>
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                Respect other players' roleplay
-                            </li>
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                Follow server guidelines
-                            </li>
-                        </ul>
+        <section id="rules" class="py-20 relative">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-5xl md:text-6xl font-orbitron font-black mb-6">
+                            <span class="bg-vice-gradient bg-clip-text text-transparent">
+                                VICE CODE
+                            </span>
+                        </h2>
+                        <p class="text-xl text-vice-text/70 max-w-3xl mx-auto">
+                            Essential rules for maintaining order and quality within the Vice City criminal underworld.
+                        </p>
                     </div>
 
-                    <div class="tactical-card p-8 bg-siege-dark relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="flex items-center mb-6">
-                            <i class="ri-shield-check-line text-2xl text-siege-orange mr-4"></i>
-                            <h3 class="text-3xl font-siege font-bold uppercase">Roleplay Rules</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- General Rules -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-12 h-12 bg-vice-gradient rounded-lg flex items-center justify-center mr-4">
+                                        <i class="ri-shield-check-line text-xl text-vice-darker"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-orbitron font-bold text-vice-pink">General Code</h3>
+                                </div>
+                                <ul class="space-y-4">
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-pink mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Respect all syndicate members and leadership
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-pink mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        No exploitation of system vulnerabilities
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-pink mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Maintain character integrity at all times
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-pink mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Follow syndicate hierarchy and commands
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <ul class="space-y-4">
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                Value your character's life
-                            </li>
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                No combat logging
-                            </li>
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                Respect territory rules
-                            </li>
-                            <li class="flex items-center text-siege-white/70">
-                                <i class="ri-checkbox-circle-line text-siege-orange mr-3"></i>
-                                Use appropriate communication
-                            </li>
-                        </ul>
+
+                        <!-- Roleplay Rules -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-cyan/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-12 h-12 bg-vice-gradient rounded-lg flex items-center justify-center mr-4">
+                                        <i class="ri-user-voice-line text-xl text-vice-darker"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-orbitron font-bold text-vice-cyan">Roleplay Standards</h3>
+                                </div>
+                                <ul class="space-y-4">
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-cyan mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Maintain immersive character development
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-cyan mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        No breaking character without permission
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-cyan mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Respect ongoing storylines and plots
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-cyan mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        No powergaming or meta-gaming allowed
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Criminal Code -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-orange/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-12 h-12 bg-vice-gradient rounded-lg flex items-center justify-center mr-4">
+                                        <i class="ri-skull-line text-xl text-vice-darker"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-orbitron font-bold text-vice-orange">Criminal Operations</h3>
+                                </div>
+                                <ul class="space-y-4">
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-orange mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Honor criminal hierarchy and territories
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-orange mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        No random violence without purpose
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-orange mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Maintain realistic criminal behavior
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-orange mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Respect law enforcement roleplay
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- VIP Standards -->
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-purple/20 rounded-xl relative group">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-12 h-12 bg-vice-gradient rounded-lg flex items-center justify-center mr-4">
+                                        <i class="ri-vip-crown-line text-xl text-vice-darker"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-orbitron font-bold text-vice-purple">VIP Standards</h3>
+                                </div>
+                                <ul class="space-y-4">
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-purple mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Maintain premium roleplay quality
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-purple mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Lead by example in all interactions
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-purple mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Support new members and storylines
+                                    </li>
+                                    <li class="flex items-center text-vice-text/80 group/item">
+                                        <i class="ri-checkbox-circle-line text-vice-purple mr-3 group-hover/item:scale-110 transition-transform"></i>
+                                        Contribute to server development
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Join Section -->
-        <section id="join" class="min-h-screen flex items-center justify-center relative overflow-hidden">
-            <div class="absolute inset-0">
-                <div class="tactical-grid"></div>
-            </div>
-            <div class="container mx-auto px-4 relative">
-                <h2 class="text-7xl font-siege font-bold uppercase tracking-wide mb-16 text-center tactical-heading">Join The Server</h2>
-                <div class="max-w-4xl mx-auto">
-                    <!-- Server Info -->
-                    <div class="mb-12 p-8 bg-siege-gray tactical-card relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-center justify-center mb-6">
-                                <i class="ri-server-line text-3xl text-siege-orange mr-4"></i>
-                                <h3 class="text-3xl font-siege font-bold uppercase">Server Status</h3>
-                            </div>
-                            <div class="flex justify-center">
-                                <code class="text-2xl font-mono bg-siege-dark/50 px-6 py-3 rounded-none select-all tactical-border">connect your-server-ip</code>
+        <section id="join" class="min-h-screen py-20 relative overflow-hidden bg-vice-dark">
+            <!-- Background Effects -->
+            <div class="absolute inset-0 bg-gradient-to-br from-vice-pink/10 via-vice-purple/10 to-vice-cyan/10"></div>
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20"></div>
+            <div class="absolute inset-0 bg-vice-dark/80"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-5xl md:text-6xl font-orbitron font-black mb-6">
+                            <span class="bg-vice-gradient bg-clip-text text-transparent">
+                                JOIN THE SYNDICATE
+                            </span>
+                        </h2>
+                        <p class="text-xl text-vice-text/70 max-w-3xl mx-auto">
+                            Enter the exclusive world of Vice City RP. Connect to our premium server and begin your criminal empire.
+                        </p>
+                    </div>
+
+                    <!-- Server Connection Panel -->
+                    <div class="mb-12">
+                        <div class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-xl relative group max-w-4xl mx-auto">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center justify-center mb-6">
+                                    <div class="w-16 h-16 bg-vice-gradient rounded-xl flex items-center justify-center mr-4">
+                                        <i class="ri-server-line text-2xl text-vice-darker"></i>
+                                    </div>
+                                    <h3 class="text-3xl font-orbitron font-bold text-vice-pink">SERVER ADDRESS</h3>
+                                </div>
+                                <div class="flex justify-center">
+                                    <div class="vice-terminal p-6 bg-vice-darker/80 border border-vice-pink/30 rounded-lg font-orbitron text-center relative group">
+                                        <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-5 transition-opacity rounded-lg"></div>
+                                        <div class="relative z-10">
+                                            <div class="text-sm text-vice-pink/70 mb-2">CONNECT TO:</div>
+                                            <code class="text-2xl text-vice-pink select-all">vicecity.rp.server</code>
+                                            <div class="text-sm text-vice-text-muted mt-2">PREMIUM ACCESS REQUIRED</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Join Options -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <a href="#" class="tactical-card p-8 bg-siege-gray relative group">
-                            <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div class="relative z-10">
-                                <div class="w-16 h-16 mx-auto mb-6 rounded-none flex items-center justify-center tactical-border">
-                                    <i class="ri-discord-line text-3xl group-hover:text-siege-orange transition-colors"></i>
+                    <!-- Connection Options -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Discord -->
+                        <a href="https://discord.gg/placeholder" target="_blank" class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-xl relative group hover:scale-105 transition-all">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-20 h-20 mx-auto mb-6 bg-vice-gradient rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="ri-discord-line text-3xl text-vice-darker"></i>
                                 </div>
-                                <h3 class="text-3xl font-siege font-bold uppercase mb-4 text-center">Join Discord</h3>
-                                <p class="text-siege-white/70 text-center">Join our community</p>
+                                <h3 class="text-2xl font-orbitron font-bold mb-4 text-vice-pink">Discord Syndicate</h3>
+                                <p class="text-vice-text/70 mb-6">Join our exclusive Discord community</p>
+                                <div class="text-vice-pink font-orbitron text-sm flex items-center justify-center">
+                                    ENTER DISCORD
+                                    <i class="ri-arrow-right-line ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                </div>
                             </div>
                         </a>
 
-                        <a href="#" class="tactical-card p-8 bg-siege-gray relative group">
-                            <div class="absolute inset-0 bg-gradient-to-br from-siege-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div class="relative z-10">
-                                <div class="w-16 h-16 mx-auto mb-6 rounded-none flex items-center justify-center tactical-border">
-                                    <i class="ri-team-line text-3xl group-hover:text-siege-orange transition-colors"></i>
+                        <!-- Application -->
+                        <a href="#" class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-cyan/20 rounded-xl relative group hover:scale-105 transition-all">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-20 h-20 mx-auto mb-6 bg-vice-gradient rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="ri-file-text-line text-3xl text-vice-darker"></i>
                                 </div>
-                                <h3 class="text-3xl font-siege font-bold uppercase mb-4 text-center">Forums</h3>
-                                <p class="text-siege-white/70 text-center">Discuss and share with others</p>
+                                <h3 class="text-2xl font-orbitron font-bold mb-4 text-vice-cyan">Whitelist Application</h3>
+                                <p class="text-vice-text/70 mb-6">Apply for exclusive server access</p>
+                                <div class="text-vice-cyan font-orbitron text-sm flex items-center justify-center">
+                                    APPLY NOW
+                                    <i class="ri-arrow-right-line ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                </div>
                             </div>
                         </a>
+
+                        <!-- Support -->
+                        <a href="#" class="vice-card p-8 bg-vice-gray/30 backdrop-blur-md border border-vice-orange/20 rounded-xl relative group hover:scale-105 transition-all">
+                            <div class="absolute inset-0 bg-vice-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-xl"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-20 h-20 mx-auto mb-6 bg-vice-gradient rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="ri-customer-service-2-line text-3xl text-vice-darker"></i>
+                                </div>
+                                <h3 class="text-2xl font-orbitron font-bold mb-4 text-vice-orange">VIP Support</h3>
+                                <p class="text-vice-text/70 mb-6">Premium support for all members</p>
+                                <div class="text-vice-orange font-orbitron text-sm flex items-center justify-center">
+                                    GET SUPPORT
+                                    <i class="ri-arrow-right-line ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Server Status -->
+                    <div class="mt-16 text-center">
+                        <div class="inline-flex items-center space-x-4 px-6 py-3 bg-vice-gray/30 backdrop-blur-md border border-vice-pink/20 rounded-full">
+                            <div class="w-3 h-3 bg-vice-pink rounded-full animate-pulse"></div>
+                            <span class="text-vice-text/80 font-orbitron">SERVER STATUS: ONLINE</span>
+                            <div class="w-3 h-3 bg-vice-pink rounded-full animate-pulse"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -374,16 +788,19 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-8 border-t border-siege-orange/10">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-siege-white/70">&copy; 2025 Server Name. All rights reserved.</p>
-            <div class="mt-4 text-sm">
-                <span class="text-siege-white/50">Template by</span>
+    <footer class="py-8 bg-vice-darker border-t border-vice-pink/20 relative">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <p class="text-vice-text-muted mb-4">&copy; 2025 Vice City RP. All rights reserved.</p>
+            <div class="text-sm">
+                <span class="text-vice-text-muted/60 font-orbitron">TEMPLATE DESIGNED BY</span>
                 <a href="https://fourtwenty.dev" target="_blank" rel="noopener" 
-                   class="inline-flex items-center text-siege-orange hover:text-siege-white transition-colors ml-2">
+                   class="inline-flex items-center text-vice-pink hover:text-vice-cyan transition-colors ml-2 group">
                     FourTwentyDevs
-                    <i class="ri-external-link-line ml-1"></i>
+                    <i class="ri-external-link-line ml-1 text-vice-text-muted/60 group-hover:text-vice-cyan transition-colors"></i>
                 </a>
+            </div>
+            <div class="mt-4 text-xs text-vice-text-muted/40 font-orbitron">
+                VICE CITY INTERFACE v5.0 | PREMIUM EDITION
             </div>
         </div>
     </footer>
